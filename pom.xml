@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>be.pxl</groupId>
 	<artifactId>simplewebservice</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>simplewebservice</name>
 	<description>demo spring boot rest api for systems expert labs</description>
 	<properties>
