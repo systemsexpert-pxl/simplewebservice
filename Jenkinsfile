@@ -40,7 +40,7 @@ podTemplate(yaml: '''
 ''') {
   node(POD_LABEL) {
     stage('Maven: Retrieve project') {
-      git url: 'https://github.com/scriptcamp/kubernetes-kaniko.git', branch: 'main'
+      git url: 'https://github.com/systemsexpert-pxl/simplewebservice.git', branch: 'main'
       container('maven') {
         stage('Maven: Build project') {
           sh '''
