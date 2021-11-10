@@ -60,10 +60,12 @@ podTemplate(yaml: '''
     stage('kaniko: Build & Deploy Image') {
       container('kaniko') {
         stage('Build & Deploy to dockerhub') {
-          echo "awesomeVersion: ${awesomeVersion}"
+          environment {
+            TAG = awesomeVersion
+          }
           sh '''
             # /kaniko/executor --context `pwd` --destination tomcoolpxl/testje:1.0
-            echo ${awesomeVersion}
+            echo $TAG
           '''
         }
       }
