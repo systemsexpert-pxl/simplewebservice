@@ -1,4 +1,4 @@
-def awesomeVersion = 'UNKNOWN'
+def myVersion = 'UNKNOWN'
 
 podTemplate(yaml: '''
     apiVersion: v1
@@ -48,11 +48,8 @@ podTemplate(yaml: '''
         stage('Maven: Build project') {
           sh '''
             mvn clean package
-            printenv
-            VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-            echo $VERSION
           '''
-          awesomeVersion = sh(returnStdout: true, script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout').trim()
+          myVersion = sh(returnStdout: true, script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout').trim()
         }
       }
     }
@@ -60,11 +57,10 @@ podTemplate(yaml: '''
     stage('kaniko: Build & Deploy Image') {
       container('kaniko') {
         stage('Build & Deploy to dockerhub') {
-          echo "awesomeVersion: ${awesomeVersion}"
-          env.TAG = awesomeVersion
+          env.TAG = myVersion
           sh '''
-            # /kaniko/executor --context `pwd` --destination tomcoolpxl/testje:1.0
-            echo $TAG
+            /kaniko/executor --context `pwd` --destination tomcoolpxl/simplewebservice:$TAG
+            echo -e deployed tomcoolpxl/simplewebservice:$TAG
           '''
         }
       }
