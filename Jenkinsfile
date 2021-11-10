@@ -1,3 +1,5 @@
+def awesomeVersion = 'UNKNOWN'
+
 podTemplate(yaml: '''
     apiVersion: v1
     kind: Pod
@@ -39,12 +41,16 @@ podTemplate(yaml: '''
           path: /root/.m2
 ''') {
   node(POD_LABEL) {
+
     stage('Maven: Retrieve project') {
       git url: 'https://github.com/systemsexpert-pxl/simplewebservice.git', branch: 'main'
       container('maven') {
         stage('Maven: Build project') {
           sh '''
             mvn clean package
+            printenv
+            VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+            echo $VERSION
           '''
         }
       }
