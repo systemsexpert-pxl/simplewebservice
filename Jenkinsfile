@@ -47,7 +47,7 @@ podTemplate(yaml: '''
       container('maven') {
         stage('Maven: Build project') {
           sh '''
-            mvn clean package
+            # mvn clean package
             printenv
             VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
             echo $VERSION
@@ -61,7 +61,7 @@ podTemplate(yaml: '''
       container('kaniko') {
         stage('Build & Deploy to dockerhub') {
           environment {
-            TAG = awesomeVersion
+            TAG = 'booh'
           }
           sh '''
             # /kaniko/executor --context `pwd` --destination tomcoolpxl/testje:1.0
