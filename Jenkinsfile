@@ -52,7 +52,7 @@ podTemplate(yaml: '''
             VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
             echo $VERSION
           '''
-          awesomeversion = sh(returnStdout: true, script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout)').trim()
+          awesomeversion = sh(returnStdout: true, script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout').trim()
         }
       }
     }
