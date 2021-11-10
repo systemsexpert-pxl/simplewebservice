@@ -23,8 +23,6 @@ podTemplate(yaml: '''
         volumeMounts:
           - name: kaniko-secret
             mountPath: /kaniko/.docker
-          - name: dockersock
-            mountPath: /var/run/docker.sock
       restartPolicy: Never
       volumes:
       - name: kaniko-secret
@@ -33,9 +31,6 @@ podTemplate(yaml: '''
             items:
             - key: .dockerconfigjson
               path: config.json
-      - name: dockersock
-        hostPath:
-          path: /var/run/docker.sock
       - name: m2
         hostPath:
           path: /root/.m2
