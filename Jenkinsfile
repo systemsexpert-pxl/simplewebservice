@@ -52,6 +52,7 @@ podTemplate(yaml: '''
             VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
             echo $VERSION
           '''
+          awesomeversion = sh(returnStdout: true, script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout)').trim()
         }
       }
     }
@@ -59,6 +60,7 @@ podTemplate(yaml: '''
     stage('kaniko: Build & Deploy Image') {
       container('kaniko') {
         stage('Build & Deploy to dockerhub') {
+          echo "awesomeVersion: ${awesomeVersion}"
           sh '''
             /kaniko/executor --context `pwd` --destination tomcoolpxl/testje:1.0
           '''
