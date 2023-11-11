@@ -12,7 +12,7 @@
 	<artifactId>simplewebservice</artifactId>
 	<version>0.0.4-SNAPSHOT</version>
 	<name>simplewebservice</name>
-	<description>demo spring boot rest api for systems expert labs</description>
+	<description>demo spring boot rest api for pxl systems expert labs</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
