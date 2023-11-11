@@ -32,9 +32,6 @@ jobs:
       - name: Create Target Directory
         run: mkdir -p ./target
 
-      - name: Move Jar File to Target Directory
-        run: mv ./target/simplewebservice-${{ env.VERSION }}.jar ./target/
-
       - name: Commit and Push Jar File to Repository
         run: |
           git config --local user.email "action@github.com"
