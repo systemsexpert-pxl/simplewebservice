@@ -1,11 +1,11 @@
-name: Build and Release Jar
+name: Push Jar to Repository
 
 on:
   release:
     types: [created]
 
 jobs:
-  build-and-upload:
+  push-jar:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,12 +26,19 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./target/simplewebservice-${{ env.VERSION }}.jar
-          asset_name: simplewebservice-${{ env.VERSION }}.jar
-          asset_content_type: application/java-archive
+      - name: Remove Previous Jar Files
+        run: git rm -rf ./target/*.jar || echo "No previous jar files to remove."
+
+      - name: Create Target Directory
+        run: mkdir -p ./target
+
+      - name: Move Jar File to Target Directory
+        run: mv ./target/simplewebservice-${{ env.VERSION }}.jar ./target/
+
+      - name: Commit and Push Jar File to Repository
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add ./target/*.jar
+          git commit -m "Add built jar file for release ${{ env.VERSION }}"
+          git push
