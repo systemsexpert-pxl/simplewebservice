@@ -1,30 +1,37 @@
-name: Maven Package
+name: Build and Release Jar
 
 on:
   release:
     types: [created]
 
 jobs:
-  build:
-
+  build-and-upload:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up JDK 11
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
-        distribution: 'temurin'
+      - name: Check out code
+        uses: actions/checkout@v3
 
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
 
-    # Archive the built artifacts
-    - name: Archive production artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: packaged-artifact
-        path: target/*.jar
+      - name: Extract Tag Name
+        run: echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
+        env:
+          GITHUB_REF: ${{ github.ref }}
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./target/simplewebservice-${{ env.VERSION }}.jar
+          asset_name: simplewebservice-${{ env.VERSION }}.jar
+          asset_content_type: application/java-archive
